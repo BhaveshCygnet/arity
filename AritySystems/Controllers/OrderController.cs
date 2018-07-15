@@ -12,10 +12,13 @@ using AritySystems.Models;
 
 namespace AritySystems.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class OrderController : Controller
     {
 
-       
+        public ActionResult Index()
+        {
+            return View();
+        }
     }
 }
