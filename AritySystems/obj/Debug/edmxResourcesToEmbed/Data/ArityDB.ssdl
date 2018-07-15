@@ -1,0 +1,317 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ArityEntityModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CustomerId" Type="int" Nullable="false" />
+    <Property Name="Prefix" Type="nvarchar" MaxLength="50" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="ExporterId" Type="int" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="OrderLineItem">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderId" Type="int" />
+    <Property Name="ProductId" Type="int" />
+    <Property Name="DollarPurchasePrice" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="RMDPurchasePrice" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="DollarSalesPrice" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="RMBSalesPrice" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="Quantity" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="ModifiedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="OrderLineItem_Supplier_Mapping">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="OrderLineItemId" Type="int" Nullable="false" />
+    <Property Name="SupplierId" Type="int" />
+    <Property Name="Quantity" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="ModifiedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Payment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="UserId" Type="int" />
+    <Property Name="OrderId" Type="int" />
+    <Property Name="PaymentDate" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="DollarAmount" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="RMBAmount" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="ModifiedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Chinese_Name" Type="nvarchar" MaxLength="150" />
+    <Property Name="English_Name" Type="nvarchar" MaxLength="150" />
+    <Property Name="Quantity" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="Dollar_Price" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="RMB_Price" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="Unit" Type="nvarchar" MaxLength="100" />
+    <Property Name="Parent_Id" Type="int" />
+    <Property Name="Description" Type="nvarchar" MaxLength="500" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="ModifiedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Supplier_Assigned_OrderLineItem">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SupplierId" Type="int" />
+    <Property Name="OrderSupplierMapId" Type="int" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="Quantity" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="ModifiedDate" Type="datetime" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="SupplierCartoon">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SupplierAssignedMapId" Type="int" />
+    <Property Name="PcsPerCartoon" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="TotalCartoons" Type="int" />
+    <Property Name="NetWeight" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="TotalNetWeight" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="GrossWeight" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="TotalGrossWeight" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="CartoonSize" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="CartoonBM" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="CartoonNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="ModifiedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="150" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="150" />
+    <Property Name="Prefix" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmailId" Type="nvarchar" MaxLength="100" />
+    <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="Address" Type="nvarchar(max)" />
+    <Property Name="GSTIN" Type="nvarchar" MaxLength="50" />
+    <Property Name="IECCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="UserName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Password" Type="nvarchar" MaxLength="50" />
+    <Property Name="CompanyName" Type="nvarchar" MaxLength="150" />
+    <Property Name="Logo" Type="nvarchar" MaxLength="500" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="ModifiedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="UserType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="Type" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK_Order_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_User1">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="ExporterId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderLineItem_Order">
+    <End Role="Order" Type="Self.Order" Multiplicity="0..1" />
+    <End Role="OrderLineItem" Type="Self.OrderLineItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderLineItem">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderLineItem_Product">
+    <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+    <End Role="OrderLineItem" Type="Self.OrderLineItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderLineItem">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderLineItem_Supplier_Mapping_Supplier_Assigned_OrderLineItem">
+    <End Role="OrderLineItem_Supplier_Mapping" Type="Self.OrderLineItem_Supplier_Mapping" Multiplicity="1" />
+    <End Role="OrderLineItem_Supplier_Mapping1" Type="Self.OrderLineItem_Supplier_Mapping" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrderLineItem_Supplier_Mapping">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderLineItem_Supplier_Mapping1">
+        <PropertyRef Name="OrderLineItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderLineItem_Supplier_Mapping_User">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="OrderLineItem_Supplier_Mapping" Type="Self.OrderLineItem_Supplier_Mapping" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderLineItem_Supplier_Mapping">
+        <PropertyRef Name="SupplierId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Payment_Order">
+    <End Role="Order" Type="Self.Order" Multiplicity="0..1" />
+    <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Payment">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Payment_User">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Payment">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Supplier_Assigned_OrderLineItem_OrderLineItem_Supplier_Mapping">
+    <End Role="OrderLineItem_Supplier_Mapping" Type="Self.OrderLineItem_Supplier_Mapping" Multiplicity="0..1" />
+    <End Role="Supplier_Assigned_OrderLineItem" Type="Self.Supplier_Assigned_OrderLineItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrderLineItem_Supplier_Mapping">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Supplier_Assigned_OrderLineItem">
+        <PropertyRef Name="OrderSupplierMapId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Supplier_Assigned_OrderLineItem_User">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Supplier_Assigned_OrderLineItem" Type="Self.Supplier_Assigned_OrderLineItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Supplier_Assigned_OrderLineItem">
+        <PropertyRef Name="SupplierId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserType_User">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="UserType" Type="Self.UserType" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserType">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ArityEntityModelStoreContainer">
+    <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrderLineItem" EntityType="Self.OrderLineItem" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrderLineItem_Supplier_Mapping" EntityType="Self.OrderLineItem_Supplier_Mapping" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Supplier_Assigned_OrderLineItem" EntityType="Self.Supplier_Assigned_OrderLineItem" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SupplierCartoon" EntityType="Self.SupplierCartoon" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserType" EntityType="Self.UserType" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Order_User" Association="Self.FK_Order_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="Order" EntitySet="Order" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_User1" Association="Self.FK_Order_User1">
+      <End Role="User" EntitySet="User" />
+      <End Role="Order" EntitySet="Order" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderLineItem_Order" Association="Self.FK_OrderLineItem_Order">
+      <End Role="Order" EntitySet="Order" />
+      <End Role="OrderLineItem" EntitySet="OrderLineItem" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderLineItem_Product" Association="Self.FK_OrderLineItem_Product">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="OrderLineItem" EntitySet="OrderLineItem" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderLineItem_Supplier_Mapping_Supplier_Assigned_OrderLineItem" Association="Self.FK_OrderLineItem_Supplier_Mapping_Supplier_Assigned_OrderLineItem">
+      <End Role="OrderLineItem_Supplier_Mapping" EntitySet="OrderLineItem_Supplier_Mapping" />
+      <End Role="OrderLineItem_Supplier_Mapping1" EntitySet="OrderLineItem_Supplier_Mapping" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderLineItem_Supplier_Mapping_User" Association="Self.FK_OrderLineItem_Supplier_Mapping_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="OrderLineItem_Supplier_Mapping" EntitySet="OrderLineItem_Supplier_Mapping" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Payment_Order" Association="Self.FK_Payment_Order">
+      <End Role="Order" EntitySet="Order" />
+      <End Role="Payment" EntitySet="Payment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Payment_User" Association="Self.FK_Payment_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="Payment" EntitySet="Payment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Supplier_Assigned_OrderLineItem_OrderLineItem_Supplier_Mapping" Association="Self.FK_Supplier_Assigned_OrderLineItem_OrderLineItem_Supplier_Mapping">
+      <End Role="OrderLineItem_Supplier_Mapping" EntitySet="OrderLineItem_Supplier_Mapping" />
+      <End Role="Supplier_Assigned_OrderLineItem" EntitySet="Supplier_Assigned_OrderLineItem" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Supplier_Assigned_OrderLineItem_User" Association="Self.FK_Supplier_Assigned_OrderLineItem_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="Supplier_Assigned_OrderLineItem" EntitySet="Supplier_Assigned_OrderLineItem" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserType_User" Association="Self.FK_UserType_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="UserType" EntitySet="UserType" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
