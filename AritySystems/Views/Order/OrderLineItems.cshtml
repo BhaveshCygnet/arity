@@ -1,0 +1,95 @@
+﻿@model List<AritySystems.Data.OrderLineItem>
+@{
+    ViewBag.Title = "Order Details";
+}
+<style>
+    .borderless td, .borderless th {
+        border: none !important;
+    }
+</style>
+<div class="container">
+    <div class="page-header">
+        <h1>Order Details</h1>
+    </div>
+    <div class="text-right">
+        <a href="/order/adminorders" class="btn btn-primary">  Back</a>
+    </div>
+    <div class="row">
+        <table class="table borderless" style="width:25%">
+            <tr>
+                <td><label>Order Name: </label> @ViewBag.OrderName</td>
+                <td><label>Order Date: </label>@ViewBag.OrderDate</td>
+                <td><label class="alert-warning">Status: </label>@ViewBag.OrderDate</td>
+            </tr>
+           
+           
+        </table>
+        <div class="row">
+            <h3>Order Items :</h3>
+        </div>
+        <div class="row">
+            <table class="table">
+                <tr>
+                    <th>#</th>
+                    <th>Order Name</th>
+                    <th>Product Name</th>
+                    <th>Purchase Price($)</th>
+                    <th>Sales Price($)</th>
+                    <th>Purchase Price(Y)</th>
+                    <th>Sales Price(Y)</th>
+                    <th>Qunatity</th>
+                    <th>Suppliers</th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.Order.Prefix</td>
+                            <td>
+                                @item.Product.English_Name
+                                (@item.Product.Chinese_Name)
+                            </td>
+                            <td>@item.DollarPurchasePrice</td>
+                            <td>@item.RMDPurchasePrice</td>
+                            <td>@item.DollarSalesPrice</td>
+                            <td>@item.RMBSalesPrice</td>
+                            <td>@item.Quantity</td>
+                            
+                            <td><select class="form-control"><option value="">--Select Supplier--</option><option value="1">Supplier 1</option><option value="2">Supplier 2</option><option value="3">Supplier 3</option></select></td>
+                        </tr>
+                }
+                
+                <tr>
+                    <td colspan="4" style="text-align:right;font-style: italic;font-weight: 600;">
+                        Order Total:
+                    </td>
+                    <td colspan="2" style="text-align:left">$ @ViewBag.Total</td>
+                </tr>
+            </table>
+        </div>
+        <div class="row text-center">
+            <div>
+                <button class="btn btn-primary" id="btnSave">Save</button>
+                <button class="btn btn-success" id="btnSubmit">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $("#btnSave").click(function () {
+            alert("Order information save successfully");
+        });
+        $("#btnSubmit").click(function () {
+            var isSupplierSelecter = true;
+            $("select").each(function () {
+                if ($(this).val() == "")
+                { alert("Please select all supplier to submit order"); isSupplierSelecter = false; return false; }
+            });
+            if (isSupplierSelecter) {
+                $(this).attr("disabled", "disabled");
+                alert("Your Order is submited");
+            }
+        });
+    </script>
+}
