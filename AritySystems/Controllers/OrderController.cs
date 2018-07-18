@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using AritySystems.Models;
 using AritySystems.Data;
 using System.Collections.Generic;
+using AritySystems.Common;
 
 namespace AritySystems.Controllers
 {
@@ -122,7 +123,54 @@ namespace AritySystems.Controllers
             }
         }
 
-        
+        public JsonResult AddSupplierOrderLineItems(SupplierOrderLineItemModel model)
+        {
+            Supplier_Assigned_OrderLineItem data = new Supplier_Assigned_OrderLineItem();
+            try
+            {
+                if (model != null)
+                {
+                    using (var db = new ArityEntities())
+                    {
+                        data.OrderSupplierMapId = model.OrderSupplierMapId;
+                        data.Quantity = model.Quantity;
+                        data.Status = "Draft";
+                        data.SupplierId = model.SupplierId;
+                        data.CreatedDate = DateTime.UtcNow;
+                        data.ModifiedDate = DateTime.UtcNow;
+                        db.Supplier_Assigned_OrderLineItem.Add(data);
+                        db.SaveChanges();
+                    }
+                }
+                return Json(new { data = data }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }            
+        }
+
+        public List<SelectListItem> SupplierDD()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            try
+            {
+                using (var db = new ArityEntities())
+                {
+                    var data = (from a in db.Users
+                                join b in db.UserTypes on a.Id equals b.UserId
+                                where b.Id == 4
+                                select new SelectListItem
+                                {
+                                    Text = a.UserName,
+                                    Value = a.Id.ToString()
+                                });
+                }
+                return list;
+            }
+            catch (Exception ex)
+            { throw; }
+        }
 
         /// <summary>
         /// Get product for order

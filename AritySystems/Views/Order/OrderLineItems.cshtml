@@ -55,7 +55,7 @@
                         <td>@item.RMBSalesPrice</td>
                         <td>@item.Quantity</td>
 
-                        <td><select class="form-control"><option value="">--Select Supplier--</option><option value="1">Supplier 1</option><option value="2">Supplier 2</option><option value="3">Supplier 3</option></select></td>
+                        <td>@Html.DropDownListFor(Model=> Model.SupplierId, Model.SupplierList)</td>
                     </tr>
                 }
 

@@ -7,8 +7,10 @@ namespace AritySystems.Common
 {
     public class Common
     {
-
-        public enum UserType
+        /// <summary>
+        /// Define User Types as per system
+        /// </summary>
+        public enum ArityUserType
         {
             Admin = 1,
             Sales = 2,
@@ -16,6 +18,12 @@ namespace AritySystems.Common
             Supplier = 4,
             Exporter = 5,
             Customer = 6
+        }
+
+        public enum OrderStatus
+        {
+            draft =1,
+            pending = 2
         }
     }
 }
