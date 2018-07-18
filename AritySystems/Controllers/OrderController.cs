@@ -40,12 +40,12 @@ namespace AritySystems.Controllers
         public JsonResult GetOrderList()
         {
             ArityEntities objDb = new ArityEntities();
-            var orderLst = (from order in objDb.Orders.ToList()
+            var orderLst = (from order in objDb.Orders.OrderByDescending(_=>_.CreatedDate).ToList()
                             select new
                             {
                                 Id = order.Id,
                                 Prefix = order.Prefix,
-                                CreatedDate = order.CreatedDate,
+                                CreatedDate = order.CreatedDate.GetValueOrDefault().ToString("MM/dd/yyyy h:m tt"),
                                 Status = order.Status,
                                 TotalItem = order.OrderLineItems.Sum(_ => _.Quantity),
                                 Total = order.OrderLineItems.Sum(_ => (_.DollarPurchasePrice * _.Quantity))
