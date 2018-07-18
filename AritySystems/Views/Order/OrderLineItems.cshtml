@@ -40,7 +40,9 @@
                     <th>Qunatity</th>
                     <th>Suppliers</th>
                 </tr>
-                @foreach (var item in Model.OrderLineItemsList)
+                @if (Model.OrderLineItemsList != null)
+                {
+                foreach (var item in Model.OrderLineItemsList)
                 {
                     <tr>
                         <td>@item.Id</td>
@@ -55,10 +57,16 @@
                         <td>@item.RMBSalesPrice</td>
                         <td>@item.Quantity</td>
 
-                        <td>@Html.DropDownListFor(Model=> Model.SupplierId, Model.SupplierList)</td>
+                        <td>@Html.DropDownListFor(Model => Model.SupplierId, Model.SupplierList)</td>
                     </tr>
                 }
-
+                }
+                else
+                {
+                    <tr>
+                        <td> No Data Available</td>
+                    </tr>
+                }
                 <tr>
                     <td colspan="4" style="text-align:right;font-style: italic;font-weight: 600;">
                         Order Total:
@@ -87,7 +95,9 @@
                     <th>Status</th>
                     <th>Date</th>
                 </tr>
-                @foreach (var item in Model.SupplierOrderLineItemList)
+                @if (Model.SupplierOrderLineItemList != null)
+                {
+                foreach (var item in Model.SupplierOrderLineItemList)
                 {
                     <tr>
                         <td>@item.Id</td>
@@ -98,6 +108,15 @@
                         <td>@item.Quantity</td>
                         <td>@item.Status</td>
                         <td>@item.CreatedDate</td>
+                    </tr>
+                }
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            No Data Available
+                        </td>
                     </tr>
                 }
 

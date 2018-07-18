@@ -123,6 +123,11 @@ namespace AritySystems.Controllers
             }
         }
 
+        /// <summary>
+        /// Add supplier order line items
+        /// </summary>
+        /// <param name="SupplierOrderLineItemModel"></param>
+        /// <returns></returns>
         public JsonResult AddSupplierOrderLineItems(SupplierOrderLineItemModel model)
         {
             Supplier_Assigned_OrderLineItem data = new Supplier_Assigned_OrderLineItem();
@@ -148,6 +153,43 @@ namespace AritySystems.Controllers
             {
                 throw;
             }            
+        }
+
+        /// <summary>
+        /// Add supplier carton details
+        /// </summary>
+        /// <param name="supplierCarton"></param>
+        /// <returns></returns>
+        public JsonResult AddSupplierCartoonDetails(SupplierCartoon supplierCartoon)
+        {
+            SupplierCartoon data = new SupplierCartoon();
+            try
+            {
+                using (var db = new ArityEntities())
+                {
+                   
+                    data.CartoonBM = supplierCartoon.CartoonBM;
+                    data.CartoonNumber = supplierCartoon.CartoonNumber;
+                    data.CartoonSize = supplierCartoon.CartoonSize;
+                    data.CreatedDate = DateTime.UtcNow;
+                    data.GrossWeight = supplierCartoon.GrossWeight;
+                    data.ModifiedDate = DateTime.UtcNow;
+                    data.NetWeight = supplierCartoon.NetWeight;
+                    data.PcsPerCartoon = supplierCartoon.PcsPerCartoon;
+                    data.Status = supplierCartoon.Status;
+                    data.SupplierAssignedMapId = supplierCartoon.SupplierAssignedMapId;
+                    data.TotalCartoons = supplierCartoon.TotalCartoons;
+                    data.TotalGrossWeight = supplierCartoon.TotalGrossWeight;
+                    data.TotalNetWeight = supplierCartoon.TotalNetWeight;
+                    db.SupplierCartoons.Add(data);
+                    db.SaveChanges();
+                }
+                return Json(new { data = data }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public List<SelectListItem> SupplierDD()
