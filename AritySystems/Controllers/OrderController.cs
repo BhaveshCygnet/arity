@@ -71,26 +71,48 @@ namespace AritySystems.Controllers
             ArityEntities objDb = new ArityEntities();
             ViewBag.Products = new SelectList(objDb.Products.Where(_ => _.Parent_Id == 0).ToList(), "Id", "English_Name");
             return View();
-            return View();
+            
         }
 
+        /// <summary>
+        /// Order Line Item list and supplier order line item list with order details
+        /// </summary>
+        /// <param name="OrderId"></param>
+        /// <returns></returns>
         public ActionResult OrderLineItems(int OrderId = 0)
         {
-            List<OrderLineItem> model = new List<OrderLineItem>();
+           OrderDetailModel model = new OrderDetailModel();
             
             try
             {
                 using (var db = new ArityEntities())
                 {
-                    ViewBag.OrderName = db.Orders.Where(x => x.Id == OrderId).Select(x=>x.Prefix).FirstOrDefault();
-                    ViewBag.OrderDate = db.Orders.Where(x => x.Id == OrderId).Select(x => x.CreatedDate).FirstOrDefault();
-                    ViewBag.Status = db.Orders.Where(x => x.Id == OrderId).Select(x => x.Status).FirstOrDefault();
-                    model = db.OrderLineItems.Where(x=>x.OrderId == OrderId).ToList();
-                    foreach (var item in model)
+                    model.OrderName = db.Orders.Where(x => x.Id == OrderId).Select(x => x.Prefix).FirstOrDefault();
+                    model.OrderDate = db.Orders.Where(x => x.Id == OrderId).Select(x => x.CreatedDate).FirstOrDefault() ?? DateTime.MinValue;
+                    model.Status = db.Orders.Where(x => x.Id == OrderId).Select(x => x.Status).FirstOrDefault();
+                    model.OrderLineItemsList = db.OrderLineItems.Where(x => x.OrderId == OrderId).ToList();
+                    foreach (var item in model.OrderLineItemsList)
                     {
-                        ViewBag.Total = item.DollarPurchasePrice * item.Quantity;
+                        model.OrderTotal = item.DollarPurchasePrice * item.Quantity ?? 0;
                     }
-                    
+                    model.SupplierOrderLineItemList = (from a in db.Supplier_Assigned_OrderLineItem
+                                                       join b in db.OrderLineItem_Supplier_Mapping on a.OrderSupplierMapId equals b.Id
+                                                       join c in db.OrderLineItems on b.OrderLineItemId equals c.Id
+                                                       join d in db.Orders on c.OrderId equals d.Id
+                                                       where d.Id == OrderId
+                                                       select new SupplierOrderLineItemModel
+                                                       {
+                                                           Id = a.Id,
+                                                           CreatedDate = a.CreatedDate,
+                                                           ModifiedDate = a.ModifiedDate,
+                                                           OrderSupplierMapId = a.OrderSupplierMapId,
+                                                           Order_Prefix = d.Prefix,
+                                                           Quantity = a.Quantity,
+                                                           Status = a.Status,
+                                                           SupplierId = a.SupplierId,
+                                                           SupplierName = b.User.UserName
+                                                       }).ToList();
+
                 }
                 return View(model);
             }
@@ -98,25 +120,9 @@ namespace AritySystems.Controllers
             {
                 throw;
             }
-        //    return View();
         }
 
-        public ActionResult SuppliersOrderLineItems(int orderId = 0)
-        {
-            List<Supplier_Assigned_OrderLineItem> model = new List<Supplier_Assigned_OrderLineItem>();
-
-            try {
-                using (var db = new ArityEntities())
-                {
-                    model = db.Supplier_Assigned_OrderLineItem.Where(x=>x.==)
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-            return View();
-        }
+        
 
         /// <summary>
         /// Get product for order

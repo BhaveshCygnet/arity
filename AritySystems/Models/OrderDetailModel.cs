@@ -2,20 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using AritySystems.Data;
 
 namespace AritySystems.Models
 {
     public class OrderDetailModel
     {
-        public int Id { get; set; }
-        public Nullable<int> OrderId { get; set; }
-        public Nullable<int> ProductId { get; set; }
-        public Nullable<decimal> DollarPurchasePrice { get; set; }
-        public Nullable<decimal> RMDPurchasePrice { get; set; }
-        public Nullable<decimal> DollarSalesPrice { get; set; }
-        public Nullable<decimal> RMBSalesPrice { get; set; }
-        public Nullable<decimal> Quantity { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
-        public Nullable<System.DateTime> ModifiedDate { get; set; }
+        public string OrderName { get; set; }
+        public DateTime OrderDate { get; set; }
+        public string Status { get; set; }
+        public Decimal OrderTotal { get; set; }
+        public IEnumerable<OrderLineItem> OrderLineItemsList { get; set; }
+        public IEnumerable<SupplierOrderLineItemModel> SupplierOrderLineItemList { get; set; }
     }
 }

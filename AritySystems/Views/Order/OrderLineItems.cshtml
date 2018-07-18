@@ -1,4 +1,4 @@
-﻿@model List<AritySystems.Data.OrderLineItem>
+﻿@model AritySystems.Models.OrderDetailModel
 @{
     ViewBag.Title = "Order Details";
 }
@@ -17,12 +17,12 @@
     <div class="row">
         <table class="table borderless" style="width:25%">
             <tr>
-                <td><label>Order Name: </label> @ViewBag.OrderName</td>
-                <td><label>Order Date: </label>@ViewBag.OrderDate</td>
-                <td><label class="alert-warning">Status: </label>@ViewBag.OrderDate</td>
+                <td><label>Order Name: </label> @Model.OrderName</td>
+                <td><label>Order Date: </label>@Model.OrderDate</td>
+                <td><label class="alert-warning">Status: </label>@Model.Status</td>
             </tr>
-           
-           
+
+
         </table>
         <div class="row">
             <h3>Order Items :</h3>
@@ -40,30 +40,30 @@
                     <th>Qunatity</th>
                     <th>Suppliers</th>
                 </tr>
-                @foreach (var item in Model)
+                @foreach (var item in Model.OrderLineItemsList)
                 {
-                        <tr>
-                            <td>@item.Id</td>
-                            <td>@item.Order.Prefix</td>
-                            <td>
-                                @item.Product.English_Name
-                                (@item.Product.Chinese_Name)
-                            </td>
-                            <td>@item.DollarPurchasePrice</td>
-                            <td>@item.RMDPurchasePrice</td>
-                            <td>@item.DollarSalesPrice</td>
-                            <td>@item.RMBSalesPrice</td>
-                            <td>@item.Quantity</td>
-                            
-                            <td><select class="form-control"><option value="">--Select Supplier--</option><option value="1">Supplier 1</option><option value="2">Supplier 2</option><option value="3">Supplier 3</option></select></td>
-                        </tr>
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Order.Prefix</td>
+                        <td>
+                            @item.Product.English_Name
+                            (@item.Product.Chinese_Name)
+                        </td>
+                        <td>@item.DollarPurchasePrice</td>
+                        <td>@item.RMDPurchasePrice</td>
+                        <td>@item.DollarSalesPrice</td>
+                        <td>@item.RMBSalesPrice</td>
+                        <td>@item.Quantity</td>
+
+                        <td><select class="form-control"><option value="">--Select Supplier--</option><option value="1">Supplier 1</option><option value="2">Supplier 2</option><option value="3">Supplier 3</option></select></td>
+                    </tr>
                 }
-                
+
                 <tr>
                     <td colspan="4" style="text-align:right;font-style: italic;font-weight: 600;">
                         Order Total:
                     </td>
-                    <td colspan="2" style="text-align:left">$ @ViewBag.Total</td>
+                    <td colspan="2" style="text-align:left">$ @Model.OrderTotal</td>
                 </tr>
             </table>
         </div>
@@ -72,6 +72,36 @@
                 <button class="btn btn-primary" id="btnSave">Save</button>
                 <button class="btn btn-success" id="btnSubmit">Submit</button>
             </div>
+        </div>
+
+        <div class="row">
+            <h3>Supplier Order Items :</h3>
+        </div>
+        <div class="row">
+            <table class="table">
+                <tr>
+                    <th>#</th>
+                    <th>Supplier Name</th>
+                    <th>Order Prefix </th>
+                    <th>Quantity</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+                @foreach (var item in Model.SupplierOrderLineItemList)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.SupplierName</td>
+                        <td>
+                            @item.Order_Prefix
+                        </td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Status</td>
+                        <td>@item.CreatedDate</td>
+                    </tr>
+                }
+
+            </table>
         </div>
     </div>
 </div>
