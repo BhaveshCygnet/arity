@@ -296,6 +296,10 @@
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Order\OrderLineItems.cshtml" />
+    <Content Include="Views\Order\MakeOrder.cshtml" />
+    <Content Include="Views\Order\OrderDetail.cshtml" />
+    <Content Include="Views\Order\OrderDetails.cshtml" />
+    <Content Include="Views\Order\OrderList.cshtml" />
     <Content Include="Views\Product\List.cshtml" />
   </ItemGroup>
   <ItemGroup>

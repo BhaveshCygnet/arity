@@ -8,6 +8,7 @@
     @Scripts.Render("~/bundles/modernizr")
     <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.2.1/font-awesome-animation.css" rel="stylesheet" />
     <style>
         .navbar-inverse .navbar-nav > li > a {
             color: #fff;
@@ -17,6 +18,7 @@
             background-color: #222487;
             border-color: #080808;
         }
+        
     </style>
 
 </head>
@@ -47,8 +49,11 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    @*<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>*@
-    <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
     @RenderSection("scripts", required: false)
+    <script>
+        $(window).load(function () {
+            $(".fa.fa-bell").addClass("faa-ring animated");
+            setTimeout(function () { $(".fa.fa-bell").removeClass("faa-ring animated"); }, 5000);
+        });</script>
 </body>
 </html>
