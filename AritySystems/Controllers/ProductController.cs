@@ -24,7 +24,7 @@ namespace AritySystems.Controllers
                 Product product = new Product();
                 ArityEntities dataContext = new ArityEntities();
                 product = dataContext.Products.Where(x => x.Id == Id).FirstOrDefault();
-                ViewBag.productList = new SelectList(dataContext.Products.Where(x => x.Parent_Id == 0).ToList(), "Id", "English_Name");
+                ViewBag.productList = product == null ? new SelectList(dataContext.Products.Where(x => x.Parent_Id == 0).ToList(), "Id", "English_Name") : new SelectList(dataContext.Products.Where(x => x.Parent_Id == 0).ToList(), "Id", "English_Name", product.Parent_Id ?? 0);
                 return View(product);
             }
 
@@ -39,10 +39,24 @@ namespace AritySystems.Controllers
         public ActionResult Create(Product product)
         {
             ArityEntities dataContext = new ArityEntities();
-            if (product.Parent_Id == null) product.Parent_Id = 0;
-            dataContext.Products.Add(product);
+            if (product != null && product.Id > 0)
+            {
+                var existingProduct = dataContext.Products.Where(_ => _.Id == product.Id).FirstOrDefault();
+                existingProduct.Chinese_Name = product.Chinese_Name;
+                existingProduct.English_Name = product.English_Name;
+                existingProduct.Quantity = product.Quantity;
+                existingProduct.Unit = product.Unit;
+                existingProduct.Dollar_Price = product.Dollar_Price;
+                existingProduct.RMB_Price = product.RMB_Price;
+                existingProduct.Parent_Id = product.Parent_Id == null ? existingProduct.Parent_Id : product.Parent_Id;
+            }
+            else
+            {
+                if (product.Parent_Id == null) product.Parent_Id = 0;
+                dataContext.Products.Add(product);
+            }
             dataContext.SaveChanges();
-            return View(product);
+            return RedirectToAction("list", "product");
         }
 
         public ActionResult List()
@@ -55,19 +69,32 @@ namespace AritySystems.Controllers
         {
             ArityEntities dataContext = new ArityEntities();
 
-            var productList = (from product in dataContext.Products.ToList()
-                            select new
-                            {
-                                Id = product.Id,
-                                Chinese_Name = product.Chinese_Name,
-                                English_Name = product.English_Name,
-                                Quantity = product.Quantity,
-                                Dollar_Price = product.Dollar_Price,
-                                RMB_Price = product.RMB_Price,
-                                Unit = product.Unit,
-                                Description = product.Description,
-                                ModifiedDate = product.ModifiedDate
-                            }).ToList();
+            var productList = (from product in dataContext.Products.ToList().Where(_ => _.Parent_Id == 0)
+                               select new
+                               {
+                                   Id = product.Id,
+                                   Chinese_Name = product.Chinese_Name,
+                                   English_Name = product.English_Name,
+                                   Quantity = product.Quantity,
+                                   Dollar_Price = product.Dollar_Price,
+                                   RMB_Price = product.RMB_Price,
+                                   Unit = product.Unit,
+                                   Description = product.Description,
+                                   ModifiedDate = product.ModifiedDate.GetValueOrDefault().ToString("MM/dd/yyyy h:m tt"),
+                                   ChildProducts = (from subProcduct in dataContext.Products.ToList().Where(_ => _.Parent_Id == product.Id)
+                                                    select new
+                                                    {
+                                                        Id = subProcduct.Id,
+                                                        Chinese_Name = subProcduct.Chinese_Name,
+                                                        English_Name = subProcduct.English_Name,
+                                                        Quantity = subProcduct.Quantity,
+                                                        Dollar_Price = subProcduct.Dollar_Price,
+                                                        RMB_Price = subProcduct.RMB_Price,
+                                                        Unit = subProcduct.Unit,
+                                                        Description = subProcduct.Description,
+                                                        ModifiedDate = subProcduct.ModifiedDate.GetValueOrDefault().ToString("MM/dd/yyyy h:m tt")
+                                                    }).ToList()
+                               }).ToList();
 
             return Json(new { data = productList }, JsonRequestBehavior.AllowGet);
             ///return View(productList,JsonRequestBehavior.AllowGet);

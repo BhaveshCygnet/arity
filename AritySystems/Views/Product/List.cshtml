@@ -12,9 +12,12 @@
 </style>
 <div class="container">
     <div class="page-header">
-        <h1>Product Listing</h1>
+        <h1><i class="fa fa-product-hunt"></i> Product Listing</h1>
     </div>
     <div class="row">
+        <div class="text-right" style="margin-bottom:10px;">
+            <a href="/product/create"><button class="btn btn-primary"><i class="fa fa-plus"></i> Add Product</button></a>
+        </div>
         <table id="example" class="display" style="width:100%">
             <thead>
                 <tr>
@@ -25,8 +28,9 @@
                     <th style="width:10%">Dollar Price</th>
                     <th style="width:10%">RMB Price</th>
                     <th style="width:10%">Unit</th>
-                    <th style="width:13%">Description</th>
+                    @*<th style="width:13%">Description</th>*@
                     <th style="width:13%">Last Modified Date</th>
+                    <th style="width:10%"></th>
                 </tr>
             </thead>
         </table>
@@ -35,42 +39,18 @@
 @section Scripts {
     <script>
         function format(d) {
-            var html = '<div class="child-heading">All payments information of ' + d.name + '</div><table cellpadding="5" cellspacing="0" border="0" style="margin-left:5%;width:90%;    border: 1px solid #eee;margin-bottom: 2%;"><tr><th>Name</th><th>Amount</th><th>Payment date</th><th>Status</th></tr>';
-            if (d.id == 1) {
-                html += '<tr>' +
-                    '<td>Merchant 2</td>' +
-                    '<td>¥5000.00</td>' +
-                    '<td>05/13/2018</td>' +
-                    '<td><label class="alert-success">Paid</label></td>' +
-                    '</tr>' +
-                    '<tr>' +
-                    '<td>Customer 1</td>' +
-                    '<td>$10,000.00</td>' +
-                    '<td>05/12/2018</td>' +
-                    '<td><label class="alert-warning">Pending</label></td>' +
-                    '</tr>' +
-                    '<tr>' +
-                    '<td>Customer 1</td>' +
-                    '<td>$15,000.00</td>' +
-                    '<td>05/07/2018</td>' +
-                    '<td><label class="alert-success">Complete</label></td>' +
+            if (d.ChildProducts.length <= 0)
+                return '<div class="child-heading">No Sub products found</div>';
+            var html = '<div class="child-heading">Sub Prodcuts of ' + d.English_Name + '</div><table cellpadding="5" cellspacing="0" border="0" style="margin-left:5%;width:90%;border: 1px solid #eee;margin-bottom: 2%;"><tr><th>Chinese Name</th><th>English Name</th><th>Total Quantity</th><th>Dollar Price</th><th>RMB Price</th><th></th></tr>';
+            $.each(d.ChildProducts, function (index, data) {
+                html += '<tr><td>' + data.Chinese_Name + '</td>' +
+                    '<td>' + data.English_Name + '</td>' +
+                    '<td>' + data.Quantity + '</td>' +
+                    '<td>' + data.Dollar_Price + '</td>' +
+                    '<td>' + data.RMB_Price + '</td>' +
+                    '<td><a href="/product/create/' + data.Id + '"><i class="fa fa-pencil-square-o" style="color:green;margin-right:10px;vertical-align:inherit;"></i></a><a href="javascript:"><i style="color:red;" class="fa fa-times"></i></a></td>' +
                     '</tr>';
-            }
-            else {
-                html += '<tr>' +
-                    '<td>Merchant 5</td>' +
-                    '<td>¥200.00</td>' +
-                    '<td>05/05/2018</td>' +
-                    '<td><label class="alert-success">Paid</label></td>' +
-                    '</tr>' +
-
-                    '<tr>' +
-                    '<td>Customer 2</td>' +
-                    '<td>$200.00</td>' +
-                    '<td>05/04/2018</td>' +
-                    '<td><label class="alert-success">Complete</label></td>' +
-                    '</tr>';
-            }
+            });
             html += '</table>';
             return html;
         }
@@ -80,22 +60,33 @@
                 "ajax": "/Product/ProductList",
                 "columns": [
                     {
-                        "className": '',
+                        "className": 'details-control',
                         "orderable": false,
                         "data": null,
-                        "defaultContent": '<a href="/Order/ViewOrderDetail?OrderId=5"><button class="btn btn-primary">View Sub Products</button></a>'
+                        'render': function (data, type, full, meta) {
+                            if (data.ChildProducts.length <= 0)
+                                return '';
+                            else
+                                return '<a href="javascript:"><button class="btn btn-primary details-control"><i class="fa fa-plus-circle"></i> Sub Products</button></a>';
+                        }
                     },
-                    
+
                     { "data": "Chinese_Name" },
                     { "data": "English_Name" },
                     { "data": "Quantity" },
                     { "data": "Dollar_Price" },
                     { "data": "RMB_Price" },
                     { "data": "Unit" },
-                    { "data": "Description" },
-                    { "data": "ModifiedDate" }
-
-                ],
+                    //{ "data": "Description" },
+                    { "data": "ModifiedDate" },
+                    {
+                        "className": '',
+                        "orderable": false,
+                        "data": null,
+                        'render': function (data, type, full, meta) {
+                            return '<a href="/product/create/' + data.Id + '"><i class="fa fa-pencil-square-o" style="color:green;margin-right:10px;vertical-align:inherit;"></i></a><a href="javascript:"><i style="color:red;" class="fa fa-times"></i></a>';
+                        }
+                    }],
                 "order": [[1, 'asc']]
             });
 
@@ -108,17 +99,20 @@
                     // This row is already open - close it
                     row.child.hide();
                     tr.removeClass('shown');
-                    tr.find(".details-control").find(".btn").html("Show Payment");
+                    tr.find(".details-control").find(".btn").html("<i class='fa fa-plus-circle'></i> Sub Products");
                 }
                 else {
                     // Open this row
+                    if (row.data().ChildProducts.length <= 0) {
+                        tr.removeClass('shown');
+                        return;
+                    }
                     row.child(format(row.data())).show();
-                    tr.find(".details-control").find(".btn").html("Hide Payment");
+                    tr.find(".details-control").find(".btn").html("<i class='fa fa-minus-circle'></i> Sub Products");
                     tr.addClass('shown');
                 }
             });
         });
     </script>
 }
-
 
