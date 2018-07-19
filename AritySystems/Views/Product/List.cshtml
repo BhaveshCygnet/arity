@@ -1,0 +1,124 @@
+﻿@{
+    ViewBag.Title = "Product Listing";
+}
+<style>
+    .child-heading {
+        padding: 2% 0 2% 6%;
+        font-size: 16px;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-style: italic;
+    }
+</style>
+<div class="container">
+    <div class="page-header">
+        <h1>Product Listing</h1>
+    </div>
+    <div class="row">
+        <table id="example" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th style="width:10%"></th>
+                    <th style="width:15%">Chinese Name</th>
+                    <th style="width:15%">English Name</th>
+                    <th style="width:10%">Total Quantity</th>
+                    <th style="width:10%">Dollar Price</th>
+                    <th style="width:10%">RMB Price</th>
+                    @*<th style="width:10%">Unit</th>
+                    <th style="width:13%">Description</th>*@
+                    @*<th style="width:13%">Last Modified Date</th>*@
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        function format(d) {
+            var html = '<div class="child-heading">All payments information of ' + d.name + '</div><table cellpadding="5" cellspacing="0" border="0" style="margin-left:5%;width:90%;    border: 1px solid #eee;margin-bottom: 2%;"><tr><th>Name</th><th>Amount</th><th>Payment date</th><th>Status</th></tr>';
+            if (d.id == 1) {
+                html += '<tr>' +
+                    '<td>Merchant 2</td>' +
+                    '<td>¥5000.00</td>' +
+                    '<td>05/13/2018</td>' +
+                    '<td><label class="alert-success">Paid</label></td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td>Customer 1</td>' +
+                    '<td>$10,000.00</td>' +
+                    '<td>05/12/2018</td>' +
+                    '<td><label class="alert-warning">Pending</label></td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    '<td>Customer 1</td>' +
+                    '<td>$15,000.00</td>' +
+                    '<td>05/07/2018</td>' +
+                    '<td><label class="alert-success">Complete</label></td>' +
+                    '</tr>';
+            }
+            else {
+                html += '<tr>' +
+                    '<td>Merchant 5</td>' +
+                    '<td>¥200.00</td>' +
+                    '<td>05/05/2018</td>' +
+                    '<td><label class="alert-success">Paid</label></td>' +
+                    '</tr>' +
+
+                    '<tr>' +
+                    '<td>Customer 2</td>' +
+                    '<td>$200.00</td>' +
+                    '<td>05/04/2018</td>' +
+                    '<td><label class="alert-success">Complete</label></td>' +
+                    '</tr>';
+            }
+            html += '</table>';
+            return html;
+        }
+
+        $(document).ready(function () {
+            var table = $('#example').DataTable({
+                "ajax": "/Product/ProductList",
+                "columns": [
+                    {
+                        "className": '',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": '<a href="/Order/ViewOrderDetail?OrderId=5"><button class="btn btn-primary">View Sub Products</button></a>'
+                    },
+                    
+                    { "data": "Chinese_Name" },
+                    { "data": "English_Name" },
+                    { "data": "Quantity" },
+                    { "data": "Dollar_Price" },
+                    { "data": "RMB_Price" }
+                    //{ "data": "Unit" },
+                    //{ "data": "Description" },
+                    //{ "data": "ModifiedDate" }
+
+                ],
+                "order": [[1, 'asc']]
+            });
+
+            // Add event listener for opening and closing details
+            $('#example tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                    tr.find(".details-control").find(".btn").html("Show Payment");
+                }
+                else {
+                    // Open this row
+                    row.child(format(row.data())).show();
+                    tr.find(".details-control").find(".btn").html("Hide Payment");
+                    tr.addClass('shown');
+                }
+            });
+        });
+    </script>
+}
+
+

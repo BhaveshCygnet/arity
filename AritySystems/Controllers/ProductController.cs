@@ -28,7 +28,7 @@ namespace AritySystems.Controllers
                 return View(product);
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var exception = ex;
                 return View();
@@ -39,9 +39,38 @@ namespace AritySystems.Controllers
         public ActionResult Create(Product product)
         {
             ArityEntities dataContext = new ArityEntities();
+            if (product.Parent_Id == null) product.Parent_Id = 0;
             dataContext.Products.Add(product);
             dataContext.SaveChanges();
             return View(product);
+        }
+
+        public ActionResult List()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult ProductList()
+        {
+            ArityEntities dataContext = new ArityEntities();
+
+            var productList = (from product in dataContext.Products.ToList()
+                            select new
+                            {
+                                Id = product.Id,
+                                Chinese_Name = product.Chinese_Name,
+                                English_Name = product.English_Name,
+                                Quantity = product.Quantity,
+                                Dollar_Price = product.Dollar_Price,
+                                RMB_Price = product.RMB_Price,
+                                Unit = product.Unit,
+                                Description = product.Description,
+                                ModifiedDate = product.ModifiedDate
+                            }).ToList();
+
+            return Json(new { data = productList }, JsonRequestBehavior.AllowGet);
+            ///return View(productList,JsonRequestBehavior.AllowGet);
         }
     }
 }
