@@ -99,5 +99,17 @@ namespace AritySystems.Controllers
             return Json(new { data = productList }, JsonRequestBehavior.AllowGet);
             ///return View(productList,JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult Delete(int? id)
+        {
+            ArityEntities dataContext = new ArityEntities();
+            id = id ?? 0;
+            var product = dataContext.Products.Where(x => x.Id == id).FirstOrDefault();
+            if(product != null)
+            {
+            }
+
+            return View();
+        }
     }
 }
