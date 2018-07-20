@@ -80,7 +80,7 @@ namespace AritySystems.Controllers
         /// </summary>
         /// <param name="OrderId"></param>
         /// <returns></returns>
-        public ActionResult OrderLineItems(int OrderId = 0)
+        public ActionResult OrderLineItems(int OrderId)
         {
            OrderDetailModel model = new OrderDetailModel();
             
@@ -115,7 +115,8 @@ namespace AritySystems.Controllers
                                                        }).ToList();
 
                 }
-                return View(model);
+                return Json(new { data = model }, JsonRequestBehavior.AllowGet);
+                //return View(model);
             }
             catch (Exception ex)
             {

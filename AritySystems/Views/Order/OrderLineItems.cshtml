@@ -40,7 +40,7 @@
                     <th>Qunatity</th>
                     <th>Suppliers</th>
                 </tr>
-                @if (Model.OrderLineItemsList != null)
+                @*@if (Model.OrderLineItemsList != null)
                 {
                 foreach (var item in Model.OrderLineItemsList)
                 {
@@ -72,7 +72,7 @@
                         Order Total:
                     </td>
                     <td colspan="2" style="text-align:left">$ @Model.OrderTotal</td>
-                </tr>
+                </tr>*@
             </table>
         </div>
         <div class="row text-center">
@@ -139,6 +139,34 @@
                 $(this).attr("disabled", "disabled");
                 alert("Your Order is submited");
             }
+        });
+
+        $(document).ready(function () {
+            var table = $('#example').DataTable({
+                "ajax": "/Order/OrderLineItems",
+                "columns": [
+                    { "data": "Order_Name" },
+                    { "data": "Product_Name" },
+                    { "data": "Purchase_Price_dollar" },
+                    { "data": "Sales_Price_dollar" },
+                    { "data": "Purchase_Price_rmb" },
+                    { "data": "Sales_Price_rmb" },
+                    { "data": "quantity" },
+                    
+                    //{ "data": "Description" },
+                    { "data": "ModifiedDate" },
+                    {
+                        "className": '',
+                        "orderable": false,
+                        "data": null,
+                        'render': function (data, type, full, meta) {
+                            return '<a href="/product/create/' + data.Id + '"><i class="fa fa-pencil-square-o" style="color:green;margin-right:10px;vertical-align:inherit;"></i></a><a href="javascript:"><i style="color:red;" class="fa fa-times"></i></a>';
+                        }
+                    }],
+                "order": [[1, 'asc']]
+            });
+
+          
         });
     </script>
 }

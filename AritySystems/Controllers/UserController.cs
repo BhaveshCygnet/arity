@@ -18,10 +18,8 @@ namespace AritySystems.Controllers
             {
                 // We do not want to use any existing identity information  
                 EnsureLoggedOut();
-
                 // Store the originating URL so we can attach it to a form field  
                 returnURL = ReturnUrl;
-
                 return View(returnURL);
             }
             catch
@@ -37,8 +35,6 @@ namespace AritySystems.Controllers
             if (Request.IsAuthenticated)
                 Logout();
         }
-
-
 
         //POST: Logout  
         [HttpPost]
@@ -68,31 +64,25 @@ namespace AritySystems.Controllers
             }
         }
 
-        
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel entity)
         {
-           
             try
             {
                 using (var db = new ArityEntities())
                 {
                     if (!ModelState.IsValid)
                         return View(entity);
-
                     //check user credentials
                     var userInfo = db.Users.Where(s => s.EmailId == entity.Email.Trim() && s.Password == entity.Password.Trim()).FirstOrDefault();
                     
                     if (userInfo != null)
                     {
-
+                        FormsAuthentication.SetAuthCookie(entity.Email, true);
                         //Set A Unique name in session  
                         Session["Username"] = entity.Email;
-                        
-                        return RedirectToAction("Index", "Order","Order");  
-                       
+                        return RedirectToAction("OrderList", "Order","Order");  
                     }
                     else
                     {

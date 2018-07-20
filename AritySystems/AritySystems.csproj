@@ -171,7 +171,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Common\EnumHelpers.cs" />
-    <Compile Include="Common\Common.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
